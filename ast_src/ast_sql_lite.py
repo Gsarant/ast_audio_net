@@ -43,34 +43,44 @@ class Ast_Sql_lite():
                                                         );
 
                                     ''')
+                self.conn.commit()
                 logger.info(f"Create  device table",extra=LOG_D)
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('raspberry', 35.518915, 24.042270, 'Raspberry Pi located in ELMEPA');
                                     ''')
+                self.conn.commit()
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('ex', 40.7128, -74.0060, 'Experimental device in New York');
                                     ''')
+                self.conn.commit()
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('esp32s3-1',35.507127, 23.968207, 'ESP32 device located in Irinis Chania');
                                     ''')
+                self.conn.commit()
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('esp32s3-2',35.507127, 23.968207, 'ESP32 device located in Irinis Chania');
                                     ''')
+                self.conn.commit()
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('esp32s3-3',35.507127, 23.968207, 'ESP32 device located in Irinis Chania');
                                     ''')
+                self.conn.commit()
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('esp32s3-4',35.507127, 23.968207, 'ESP32 device located in Irinis Chania');
                                     ''')
+                self.conn.commit()
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('giannis',35.507127, 23.968207, 'ESP32 device located in Irinis Chania');
                                     ''')
+                self.conn.commit()
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('hlias',35.507127, 23.968207, 'ESP32 device located in Irinis Chania');
                                     ''')
+                self.conn.commit()
                 self.cursor.execute('''INSERT INTO devices (device_name, latitude, longitude, description)
                                         VALUES ('herc',35.507127, 23.968207, 'ESP32 device located in Irinis Chania');
                                     ''')
+                self.conn.commit()
                 logger.info(f"Add records to  device table",extra=LOG_D)
             except Exception as e:
                 logger.error(f"Error create devices table {str(e)} ",extra=LOG_D)
@@ -92,6 +102,7 @@ class Ast_Sql_lite():
                                                                 );
                                     '''
                                     )
+                self.conn.commit()
                 logger.info(f"Create  ast_table table",extra=LOG_D)
             except Exception as e:
                 logger.error(f"Error create ast_table table {str(e)} ",extra=LOG_D)
