@@ -2,7 +2,7 @@ import pandas as pd
 import sqlite3
 
 class SQL_to_Pandas():
-    def __init__(self,db_file='../ast_audio.db'):
+    def __init__(self,db_file='../ast_audio_db/ast_audio.db'):
         self.conn=  sqlite3.connect(db_file)
         self.df=None
     def __del__(self):

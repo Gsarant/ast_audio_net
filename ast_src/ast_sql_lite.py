@@ -5,7 +5,7 @@ from log_test import logger
 LOG_D={'module_name':'ast_sql_lite'}
 
 class Ast_Sql_lite():
-    def __init__(self,db_file='ast_audio.db'):
+    def __init__(self,db_file='ast_audio_db/ast_audio.db'):
         self.conn = sqlite3.connect(db_file)
         self.cursor = self.conn.cursor()
         self.__create_tables__()

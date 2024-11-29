@@ -114,7 +114,7 @@ def proc(ast,db):
                 conf_sound3=pred_labels[2]['conf']
                 #Sound category for reject
                 #reject_sounds=['Hum','Static','Speech','Rumble','Buzzer','Purr','Burst, pop','Burst,pop']
-                reject_sounds=['Hum','Static','Rumble','Buzzer','Purr','Burst, pop','Silence','White noise']
+                reject_sounds=['Hum','Static','Rumble','Buzzer','Purr','Burst, pop','Silence','White noise',"Environmental noise","Whoosh, swoosh, swish","Outside, rural or natural"]
                 if 'audiosuser' in audio_file:
                     max_conf_thresh=0.0
                 else:
