@@ -18,6 +18,7 @@ app=get_app()
 
 AudioComponent = load_react_component(app, 'react', 'audio_component.js')
 
+
 dash.register_page(
     __name__,
     #path='/audio_details',
@@ -25,7 +26,6 @@ dash.register_page(
     title='Audio details Dashboard',
     name='Audio details Dashboard'
 )
-
 
 def get_db_rec(str_date_from=None,str_date_to=None):
     sql_to_pandas=SQL_to_Pandas()
@@ -52,10 +52,12 @@ def get_db_rec(str_date_from=None,str_date_to=None):
     return data,columns,str_date_from,str_date_to
 
 
-data,columns,str_date_from,str_date_to=get_db_rec()
+_,columns,_,_=get_db_rec()
+data=[]
 
 audio_component=html.Div(
     [
+        
         AudioComponent(
              id='audio_component', 
             # poster=request.host_url + f"assets/specrogram_images/{df.head(1).T['spectrogram_image']}",
@@ -73,9 +75,9 @@ date_picker=html.Div([
     dcc.DatePickerRange(
         id='date_picker',
         month_format='M-D-Y',
-        start_date=str_to_date(str_date_from),
+        #start_date=str_to_date(str_date_from),
        # start_date_placeholder_text=str_date_from,
-        end_date=str_to_date(str_date_to),
+        #end_date=str_to_date(str_date_to),
        # end_date_placeholder_text=str_date_to,
        #disabled_days=False,
        display_format='YYYY/MM/DD',
@@ -83,6 +85,7 @@ date_picker=html.Div([
 ])
 
 legend= html.Div([
+            
             html.Div([
                 html.Div(style={
                     'width': '24px',
@@ -145,6 +148,7 @@ modal=dbc.Modal(
 
 def layout(**kwargs):
     custom_childer=[
+        dcc.Location(id='url', refresh=True),
         dbc.Row([
             date_picker]
             ),
@@ -153,8 +157,8 @@ def layout(**kwargs):
                         dbc.Row([
                             dag.AgGrid(
                                 id="audio_grid_table",
-                                columnDefs=columns,
-                                rowData=data,
+                                #columnDefs=columns,
+                                #rowData=data,
                                 columnSize="sizeToFit",
                                 columnSizeOptions={
                                     'defaultMinWidth': 120,
@@ -166,7 +170,7 @@ def layout(**kwargs):
                                                 "animateRows": False,
                                                 "rowHeight": 25
                                                 },
-                                selectedRows=[data[0]],
+                                #selectedRows=[data[0]],
                                 style={"height":750, "width": "100%"},
                              )
                         ]),
@@ -203,19 +207,44 @@ def layout(**kwargs):
     ]
     return html.Div(children=custom_childer)
 
-@callback(Output('audio_grid_table','rowData'), 
-         Output('audio_grid_table','selectedRows'), 
-         Input('rec_database_refresh_button','n_clicks'),
-         State('date_picker','start_date'),
-         State('date_picker','end_date'),
-       #  prevent_initial_call=True,
+
+@callback( Output('audio_grid_table','rowData',allow_duplicate=True),
+          Output('audio_grid_table','columnDefs',allow_duplicate=True),
+          Output('audio_grid_table','selectedRows',allow_duplicate=True), 
+
+          Output('date_picker','start_date',allow_duplicate=True), 
+          Output('date_picker','end_date',allow_duplicate=True),
+          Input('url', 'pathname'),
+          prevent_initial_call=True
 )
-def refresh_button_db(n_clicks,start_date,end_date):
-    data,columns,str_date_from,str_date_to=get_db_rec(start_date,end_date)   
+def refresh_page(p):
+    data,columns,str_date_from,str_date_to=get_db_rec()
+    start_date=str_date_from
+    end_date=str_date_to
     if len(data)>0:
         ret= [data[0]]
     else:
         ret=None
+    return data,columns,ret,start_date,end_date
+
+
+@callback(Output('audio_grid_table','rowData',allow_duplicate=True), 
+         Output('audio_grid_table','selectedRows',allow_duplicate=True), 
+         Input('rec_database_refresh_button','n_clicks'),
+         State('date_picker','start_date'),
+         State('date_picker','end_date'),
+         prevent_initial_call=True,
+)
+def refresh_button_db(n_clicks,start_date,end_date):
+    data,columns,str_date_from,str_date_to=get_db_rec(start_date,end_date)   
+    try:
+        if len(data)>0:
+            ret= [data[0]]
+        else:
+            ret=None
+    except:
+        ret=None
+        data=[]
     return data,ret
 
 @callback(
@@ -243,7 +272,7 @@ def zoom_image(click,title,poster):
      Output('audio_component','sound2'),
      Output('audio_component','sound3'),  
      Input('audio_grid_table','selectedRows'), 
-     
+     prevent_initial_call=True,
 )
 def update_audio_player(selectedRows):
     poster=None
@@ -252,7 +281,7 @@ def update_audio_player(selectedRows):
     sound1=None
     sound2=None
     sound3=None
-    if len(selectedRows)>0:
+    if selectedRows is not None and len(selectedRows)>0:
         for selected_row in selectedRows:
            poster=  request.host_url + f"assets/specrogram_images/{selected_row['spectrogram_image']}"
            src=request.host_url+f"assets/audio_mp3/{selected_row['file_name']}"

@@ -9,15 +9,15 @@ LOG_D={'module_name':'ast_model'}
 
 def cuda_check():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    logger.info(f"Using device: {device}")
+    logger.info(f"Using device: {device}",extra=LOG_D)
     
 
 #Additional Info when using cuda
     if device.type == 'cuda':
         logger.info(f"Cuda device {torch.cuda.get_device_name(0)}")
-        logger.info('Memory Usage:')
-        logger.info(f"Allocated: {round(torch.cuda.memory_allocated(0)/1024**3,1)} GB")
-        logger.info(f"Cached:    {round(torch.cuda.memory_reserved(0)/1024**3,1)} GB")
+        logger.info('Memory Usage:',extra=LOG_D)
+        logger.info(f"Allocated: {round(torch.cuda.memory_allocated(0)/1024**3,1)} GB",extra=LOG_D)
+        logger.info(f"Cached:    {round(torch.cuda.memory_reserved(0)/1024**3,1)} GB",extra=LOG_D)
     return device
 
 class AST():
