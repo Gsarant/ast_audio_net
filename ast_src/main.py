@@ -83,7 +83,9 @@ def proc(ast,db):
                     sr=audio.frame_rate
                     channels=audio.channels
                     if sr!=16000 or channels!=1:
-                        audio=audio.resample(sample_rate_Hz=16000, sample_width=2, channels=1)
+                        audio=audio.set_frame_rate(16000)
+                        audio=audio.set_channels(1)
+                        #(sample_rate_Hz=16000, sample_width=2, channels=1)
                         logger.info(f"Resample data",extra=LOG_D)
                     data=np.array(audio.get_array_of_samples())
                     data=convert_rec_to_float(data)
