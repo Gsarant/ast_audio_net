@@ -36,10 +36,10 @@ def init_logger(log_dir,log_name,time_per_line=False):
     fh.setLevel(level)
 
     logger.addHandler(fh)
-    consoleHandler = logging.StreamHandler()
-    consoleHandler.setFormatter(console_formatter)
-    consoleHandler.setLevel(level)
-    logger.addHandler(consoleHandler)
+    #consoleHandler = logging.StreamHandler()
+    #consoleHandler.setFormatter(console_formatter)
+    #consoleHandler.setLevel(level)
+    #logger.addHandler(consoleHandler)
     return logger
 
 logger=init_logger("logs_ast_app",f"logs_ast_app")
